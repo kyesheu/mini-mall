@@ -19,16 +19,11 @@
 
 详细设计以 `docs/` 为准：
 
-- `docs/01-project-overview.md`：项目范围
-- `docs/02-architecture.md`：架构与分层
-- `docs/03-database.md`：数据库模型
-- `docs/04-actions-and-services.md`：Actions 与 Services
-- `docs/05-ui-guidelines.md`：UI 规范
-- `docs/06-implementation-plan.md`：实施步骤
-- `docs/07-risk-and-decisions.md`：风险与决策
-- `docs/08-test-cases.md`：手动测试用例
-- `docs/09-smoke-test-checklist.md`：P0 冒烟测试清单
-- `docs/10-release-strategy.md`：测试、发布、灰度与回滚策略
+- `docs/01-spec.md`：项目规格、MVP 范围、关键决策、风险清单
+- `docs/02-architecture.md`：分层架构、Action/Service 设计、UI 规范
+- `docs/03-database.md`：Prisma Schema、领域模型、订单状态机
+- `docs/04-implementation-plan.md`：12 步实施顺序与验证命令
+- `docs/05-test-and-release.md`：测试用例、冒烟测试、发布与回滚策略
 
 执行任务前，先读取相关文档，不要凭记忆修改架构、数据库或业务规则。
 
@@ -66,7 +61,7 @@
 
 ## 开发流程
 
-按 `docs/06-implementation-plan.md` 分阶段实现。
+按 `docs/04-implementation-plan.md` 分阶段实现。
 
 每次只做一个阶段。
 
