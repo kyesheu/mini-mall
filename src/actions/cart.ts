@@ -20,8 +20,8 @@ export async function addToCart(
   productId: number,
   quantity: number,
 ): Promise<ActionResult> {
-  const user = await requireUser()
   try {
+    const user = await requireUser()
     await addToCartService(user.id, productId, quantity)
     revalidatePath('/cart')
     return { success: true }
@@ -36,8 +36,8 @@ export async function updateCartItem(
   cartItemId: number,
   quantity: number,
 ): Promise<ActionResult> {
-  const user = await requireUser()
   try {
+    const user = await requireUser()
     await updateCartItemService(cartItemId, user.id, quantity)
     revalidatePath('/cart')
     return { success: true }
@@ -49,8 +49,8 @@ export async function updateCartItem(
 }
 
 export async function removeFromCart(cartItemId: number): Promise<ActionResult> {
-  const user = await requireUser()
   try {
+    const user = await requireUser()
     await removeFromCartService(cartItemId, user.id)
     revalidatePath('/cart')
     return { success: true }

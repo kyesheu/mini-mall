@@ -1,13 +1,17 @@
 import Link from 'next/link'
 import { getProductList } from '@/server/services/product-service'
 import { getCategoryList } from '@/server/services/category-service'
+import { getCurrentUser } from '@/server/auth/session'
 import { ProductGrid } from '@/components/product/ProductGrid'
 
 export default async function HomePage() {
-  const [result, categories] = await Promise.all([
+  const [result, categories, user] = await Promise.all([
     getProductList({ page: 1 }),
     getCategoryList(),
+    getCurrentUser(),
   ])
+
+  const isAdmin = user?.role === 'ADMIN'
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -22,12 +26,14 @@ export default async function HomePage() {
           >
             浏览商品
           </Link>
-          <Link
-            href="/admin"
-            className="rounded-md border border-slate-300 text-slate-700 px-6 py-2.5 text-sm font-medium hover:bg-slate-50 transition-colors"
-          >
-            后台管理
-          </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="rounded-md border border-slate-300 text-slate-700 px-6 py-2.5 text-sm font-medium hover:bg-slate-50 transition-colors"
+            >
+              后台管理
+            </Link>
+          )}
         </div>
       </section>
 

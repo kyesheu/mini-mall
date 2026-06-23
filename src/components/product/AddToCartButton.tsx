@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { addToCart } from '@/actions/cart'
 
+const AUTH_ERROR = '请先登录'
+
 interface AddToCartButtonProps {
   productId: number
   maxStock: number
@@ -28,7 +30,11 @@ export function AddToCartButton({ productId, maxStock }: AddToCartButtonProps) {
         setSuccess(true)
         setTimeout(() => setSuccess(false), 2000)
       } else if (result.error) {
-        setError(result.error)
+        if (result.error.includes(AUTH_ERROR)) {
+          router.push('/auth/login')
+        } else {
+          setError(result.error)
+        }
       }
     } catch {
       setError('操作失败，请重试')
@@ -44,7 +50,11 @@ export function AddToCartButton({ productId, maxStock }: AddToCartButtonProps) {
       if (result.success) {
         router.push('/cart')
       } else if (result.error) {
-        setError(result.error)
+        if (result.error.includes(AUTH_ERROR)) {
+          router.push('/auth/login')
+        } else {
+          setError(result.error)
+        }
         setPending(false)
       }
     })
