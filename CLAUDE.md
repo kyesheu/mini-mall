@@ -27,6 +27,8 @@
 - `docs/06-implementation-plan.md`：实施步骤
 - `docs/07-risk-and-decisions.md`：风险与决策
 - `docs/08-test-cases.md`：手动测试用例
+- `docs/09-smoke-test-checklist.md`：P0 冒烟测试清单
+- `docs/10-release-strategy.md`：测试、发布、灰度与回滚策略
 
 执行任务前，先读取相关文档，不要凭记忆修改架构、数据库或业务规则。
 
