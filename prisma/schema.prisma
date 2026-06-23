@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ============================================================
+// 枚举
+// ============================================================
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING    // 待支付
+  PAID       // 已支付
+  SHIPPED    // 已发货
+  DELIVERED  // 已签收
+  CANCELLED  // 已取消
+}
+
+// ============================================================
+// 用户表
+// ============================================================
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String                       // bcryptjs 哈希
+  name      String
+  role      Role       @default(USER)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  cartItems CartItem[]
+  orders    Order[]
+}
+
+// ============================================================
+// 分类表（不支持删除，只做新增和编辑）
+// ============================================================
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  slug        String    @unique
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+}
+
+// ============================================================
+// 商品表
+// 不支持真删除，后台只能下架（published = false）
+// 图片最多 6 张，存为 Json 数组
+// ============================================================
+model Product {
+  id          Int      @id @default(autoincrement())
+  sku         String   @unique
+  name        String
+  slug        String   @unique
+  description String   @db.Text
+  priceCents  Int                        // 单价（分）
+  imageUrls   Json     @default("[]")    // 图片 URL 数组，最多 6 张
+  stock       Int      @default(0)
+  published   Boolean  @default(false)   // 上架状态（false=下架）
+  categoryId  Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+
+  @@index([categoryId])
+  @@index([published])
+  @@index([createdAt])
+}
+
+// ============================================================
+// 购物车表
+// @@unique([userId, productId]) 支持 upsert
+// ============================================================
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int      @default(1)         // 1~99
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+// ============================================================
+// 订单表
+// ============================================================
+model Order {
+  id              Int         @id @default(autoincrement())
+  orderNo         String      @unique        // MM + YYYYMMDD + 8位随机码
+  userId          Int
+  status          OrderStatus @default(PENDING)
+  totalCents      Int                         // 订单总金额（分）
+  receiverName    String                      // 收货人姓名
+  receiverPhone   String                      // 收货人电话
+  shippingAddress String                      // 收货地址
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+
+  @@index([userId])
+  @@index([orderNo])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ============================================================
+// 订单商品快照表
+// 下单时完整快照，确保后续商品编辑/删除不影响订单历史
+// ============================================================
+model OrderItem {
+  id              Int     @id @default(autoincrement())
+  orderId         Int
+  productId       Int?                      // 原商品ID（商品删除后置 NULL）
+  productName     String                    // 商品名称快照
+  productSku      String                    // SKU 快照
+  productSlug     String?                   // slug 快照
+  productImageUrl String?                   // 首图快照
+  unitPriceCents  Int                       // 成交单价快照（分）
+  quantity        Int                       // 购买数量
+  subtotalCents   Int                       // 小计快照（分）
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+}
