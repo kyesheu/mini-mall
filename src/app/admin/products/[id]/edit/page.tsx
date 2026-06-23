@@ -1,5 +1,4 @@
 import { getCategoryList } from '@/server/services/category-service'
-import { getProductBySlug } from '@/server/services/product-service'
 import { ProductForm } from '@/components/product/ProductForm'
 import { notFound } from 'next/navigation'
 

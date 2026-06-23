@@ -9,7 +9,6 @@ import {
   ForbiddenError,
 } from '@/lib/errors'
 import type { ProductCreateInput, ProductUpdateInput } from '@/lib/validations'
-import type { PaginatedResult } from '@/types'
 import { PAGE_SIZE } from '@/lib/constants'
 
 // ============================================================
@@ -181,19 +180,3 @@ export const getProductListAdmin = cache(async (params: {
     return { items, ...buildPagination(total, page, pageSize) }
   },
 )
-
-type ProductSelect = {
-  id: number
-  sku: string
-  name: string
-  slug: string
-  description: string
-  priceCents: number
-  imageUrls: unknown
-  stock: number
-  published: boolean
-  categoryId: number | null
-  createdAt: Date
-  updatedAt: Date
-  category: { id: number; name: string; slug: string } | null
-}

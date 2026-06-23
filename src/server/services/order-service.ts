@@ -5,7 +5,6 @@ import { createOrderSchema } from '@/lib/validations'
 import {
   ValidationError,
   NotFoundError,
-  UnauthorizedError,
   ForbiddenError,
   ConflictError,
 } from '@/lib/errors'

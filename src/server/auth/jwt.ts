@@ -8,11 +8,6 @@ const JWT_SECRET = new TextEncoder().encode(secretStr)
 
 const TOKEN_EXPIRATION = '7d'
 
-interface TokenPayload {
-  sub: string
-  role: 'USER' | 'ADMIN'
-}
-
 export async function signToken(userId: number, role: 'USER' | 'ADMIN'): Promise<string> {
   return new SignJWT({ role })
     .setProtectedHeader({ alg: 'HS256' })

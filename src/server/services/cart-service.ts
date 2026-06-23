@@ -1,10 +1,8 @@
 import { cache } from 'react'
 import { prisma } from '@/server/db'
-import { getCurrentUser } from '@/server/auth/session'
 import { cartQuantitySchema } from '@/lib/validations'
 import {
   ValidationError,
-  UnauthorizedError,
   NotFoundError,
   ForbiddenError,
   ConflictError,
