@@ -26,6 +26,7 @@
 - `docs/05-ui-guidelines.md`：UI 规范
 - `docs/06-implementation-plan.md`：实施步骤
 - `docs/07-risk-and-decisions.md`：风险与决策
+- `docs/08-test-cases.md`：手动测试用例
 
 执行任务前，先读取相关文档，不要凭记忆修改架构、数据库或业务规则。
 
