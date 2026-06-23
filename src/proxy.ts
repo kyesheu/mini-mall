@@ -86,7 +86,7 @@ export async function proxy(request: NextRequest) {
   }
 
   // ============================================================
-  // Protected paths: /cart, /orders — need token
+  // Protected paths: /cart, /checkout, /orders — need token
   // ============================================================
   if (!token) return unauthorized(request)
 
@@ -106,6 +106,7 @@ export const config = {
   matcher: [
     '/admin/:path*',
     '/cart/:path*',
+    '/checkout',
     '/orders/:path*',
   ],
 }

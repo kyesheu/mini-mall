@@ -56,7 +56,7 @@ export default async function CartPage() {
         <div className="lg:col-span-1">
           <CartSummary totalCents={totalCents} itemCount={itemCount} />
           <Link
-            href="/orders"
+            href="/checkout"
             className="mt-4 block w-full rounded-md bg-[#E94560] text-white text-center py-3 text-sm font-medium hover:bg-[#E94560]/90 transition-colors"
           >
             去结算
